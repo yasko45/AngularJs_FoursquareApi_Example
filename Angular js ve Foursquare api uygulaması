@@ -1,0 +1,75 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: yas
+ * Date: 21.03.2017
+ * Time: 13:13
+ */
+
+?>
+<!doctype html>
+    <html>
+<head><title> Angular js http json api</title>
+<link rel="stylesheet" href="css/bootstrap-theme.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+
+    <script>
+
+        var myapp=angular.module("myapp",[]);
+
+        myapp.controller("mycontroller",function($scope,$http){
+
+            $scope.mekan_bul=function(){
+
+                $scope.aranan_mekan=$scope.mekan_adi;
+
+                $http.get("https://api.foursquare.com/v2/venues/search?v=20170309&ll=39.9532835,26.6461327&client_id=CHCQSC1BOQOQAON523J52Y2OAH0M3WIJ5OO2JSNMJKIBPRL1&client_secret=T1SB1R2ZIXC3DGPIN0RYSTPWLFWQSG2YHFIEE21GW1D4040O&query="+$scope.mekan_adi).then(
+
+                    function(a){
+
+                        $scope.cevap= a.data.response.venues;
+                    }
+
+
+                );
+            }
+
+        });
+
+
+
+    </script>
+</head>
+<body ng-app="myapp" ng-controller="mycontroller">
+
+<div class="container">
+    <div class="row">
+        <div style="margin:15%; padding:10px;" class="col-lg-10 bg bg-info">
+            <input type="text" placeholder="Mekan Ara.." ng-model="mekan_adi" id="mekan_adi" class="form-control">
+            <button class="btn btn-success" ng-click="mekan_bul()">Ara..</button>
+
+            <div class="mekan_liste">
+                <table class="table"><caption><i>( {{aranan_mekan}} ) </i> aramasında <b>{{cevap.length}}</b> adet sonuç bulundu</caption>
+
+                <thead><tr><th>#</th><th>Mekan Adı</th><th>X</th><th>Y</th><th>Şehir</th><th>İşlem</th></tr></thead>
+                    <tbody><tr ng-repeat="cevaplar in cevap">
+
+                        <th scope="row">{{$index+1}}</th><td><input type="text" id="{{$index+1}}_mekan_adi" value="{{cevaplar.name}}"></td><td>{{cevaplar.location.lat}}</td><td>{{cevaplar.location.lng}}</td><td>{{cevaplar.location.address}}</td><td><button class="btn btn-danger">Ekle</button></td>
+
+                    </tr></tbody>
+
+
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+</body>
+    </html>
